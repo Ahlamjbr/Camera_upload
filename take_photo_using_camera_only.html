@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Photo Using Camera Only</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        video {
+            width: 300px;
+            height: 200px;
+            border: 2px solid #ccc;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        canvas {
+            display: none;
+            border: 2px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Take a Photo Using Your Camera</h2>
+    <div class="container">
+        <!-- Video to show the live camera feed -->
+        <video id="video" autoplay></video>
+        <br />
+        <button id="captureButton">Capture Photo</button>
+        <h3>Preview of your captured photo:</h3>
+        <canvas id="canvas" width="300" height="200"></canvas>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const captureButton = document.getElementById('captureButton');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        // Access the camera using getUserMedia
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                // Display the camera feed in the video element
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                alert("Unable to access camera: " + err);
+            });
+
+        // Capture a photo when the button is clicked
+        captureButton.addEventListener('click', () => {
+            // Draw the current frame from the video to the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // Optionally, hide the video feed after capture
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
